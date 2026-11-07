@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pendientes DB</string>
+    <string name="main_title">Pendientes del día</string>
+    <string name="task_list_heading">Mis tareas</string>
+    <string name="status_pending">Pendiente</string>
+    <string name="status_completed">Completada</string>
+</resources>
