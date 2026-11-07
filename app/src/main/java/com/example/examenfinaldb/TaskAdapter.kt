@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class TaskAdapter(private val tasks: List<Task>) :
+class TaskAdapter(private val tasks: MutableList<Task>) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -42,4 +42,9 @@ class TaskAdapter(private val tasks: List<Task>) :
     }
 
     override fun getItemCount(): Int = tasks.size
+
+    fun addTask(task: Task) {
+        tasks.add(task)
+        notifyItemInserted(tasks.lastIndex)
+    }
 }
