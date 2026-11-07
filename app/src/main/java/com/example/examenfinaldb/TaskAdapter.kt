@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 
 class TaskAdapter(
@@ -18,6 +19,7 @@ class TaskAdapter(
         val description: TextView = itemView.findViewById(R.id.taskDescription)
         val status: TextView = itemView.findViewById(R.id.taskStatus)
         val completedCheckBox: MaterialCheckBox = itemView.findViewById(R.id.completedCheckBox)
+        val deleteButton: MaterialButton = itemView.findViewById(R.id.deleteTaskButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -36,6 +38,14 @@ class TaskAdapter(
         holder.completedCheckBox.setOnCheckedChangeListener { _, isChecked ->
             task.completed = isChecked
             updateVisualState(holder, task)
+        }
+
+        holder.deleteButton.setOnClickListener {
+            val currentPosition = holder.bindingAdapterPosition
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                tasks.removeAt(currentPosition)
+                notifyItemRemoved(currentPosition)
+            }
         }
 
         holder.itemView.setOnClickListener { onTaskClick(task) }
