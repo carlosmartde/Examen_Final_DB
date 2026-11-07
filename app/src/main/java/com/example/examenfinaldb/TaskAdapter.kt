@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class TaskAdapter(private val tasks: MutableList<Task>) :
-    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(
+    private val tasks: MutableList<Task>,
+    private val onTaskClick: (Task) -> Unit
+) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val description: TextView = itemView.findViewById(R.id.taskDescription)
@@ -39,6 +41,7 @@ class TaskAdapter(private val tasks: MutableList<Task>) :
         } else {
             holder.description.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
+        holder.itemView.setOnClickListener { onTaskClick(task) }
     }
 
     override fun getItemCount(): Int = tasks.size

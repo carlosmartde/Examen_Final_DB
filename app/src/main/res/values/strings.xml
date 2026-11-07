@@ -11,4 +11,9 @@
     <string name="description_required">Escribe una descripción</string>
     <string name="save_task_button">Guardar tarea</string>
     <string name="cancel_button">Cancelar</string>
+    <string name="detail_task_title">Detalle de tarea</string>
+    <string name="detail_description_label">DESCRIPCIÓN</string>
+    <string name="detail_status_label">ESTADO</string>
+    <string name="detail_created_at_label">FECHA DE CREACIÓN</string>
+    <string name="back_to_list_button">Volver a la lista</string>
 </resources>
