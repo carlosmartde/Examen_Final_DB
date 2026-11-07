@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.checkbox.MaterialCheckBox
 
 class TaskAdapter(
     private val tasks: MutableList<Task>,
@@ -16,6 +17,7 @@ class TaskAdapter(
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val description: TextView = itemView.findViewById(R.id.taskDescription)
         val status: TextView = itemView.findViewById(R.id.taskStatus)
+        val completedCheckBox: MaterialCheckBox = itemView.findViewById(R.id.completedCheckBox)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -27,6 +29,26 @@ class TaskAdapter(
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val task = tasks[position]
         holder.description.text = task.description
+        updateVisualState(holder, task)
+
+        holder.completedCheckBox.setOnCheckedChangeListener(null)
+        holder.completedCheckBox.isChecked = task.completed
+        holder.completedCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            task.completed = isChecked
+            updateVisualState(holder, task)
+        }
+
+        holder.itemView.setOnClickListener { onTaskClick(task) }
+    }
+
+    override fun getItemCount(): Int = tasks.size
+
+    fun addTask(task: Task) {
+        tasks.add(task)
+        notifyItemInserted(tasks.lastIndex)
+    }
+
+    private fun updateVisualState(holder: TaskViewHolder, task: Task) {
         holder.status.text = holder.itemView.context.getString(
             if (task.completed) R.string.status_completed else R.string.status_pending
         )
@@ -41,13 +63,6 @@ class TaskAdapter(
         } else {
             holder.description.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
-        holder.itemView.setOnClickListener { onTaskClick(task) }
-    }
-
-    override fun getItemCount(): Int = tasks.size
-
-    fun addTask(task: Task) {
-        tasks.add(task)
-        notifyItemInserted(tasks.lastIndex)
+        holder.itemView.alpha = if (task.completed) 0.65f else 1f
     }
 }

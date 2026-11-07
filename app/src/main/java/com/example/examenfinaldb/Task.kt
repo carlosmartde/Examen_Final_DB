@@ -2,6 +2,6 @@ package com.example.examenfinaldb
 
 data class Task(
     val description: String,
-    val completed: Boolean,
+    var completed: Boolean,
     val createdAt: String
 )
