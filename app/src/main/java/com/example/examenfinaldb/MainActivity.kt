@@ -14,13 +14,10 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    private val tasks = mutableListOf(
-        Task("Preparar informe diario", false, currentDate()),
-        Task("Revisar inventario", true, currentDate()),
-        Task("Responder correos pendientes", false, currentDate())
-    )
+    private val tasks = mutableListOf<Task>()
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var taskRecyclerView: RecyclerView
+    private lateinit var taskStorage: TaskStorage
 
     private val addTaskLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -43,7 +40,14 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.title = getString(R.string.main_title)
 
-        taskAdapter = TaskAdapter(tasks) { task -> openTaskDetail(task) }
+        taskStorage = TaskStorage(this)
+        tasks.addAll(taskStorage.loadTasks())
+
+        taskAdapter = TaskAdapter(
+            tasks = tasks,
+            onTaskClick = { task -> openTaskDetail(task) },
+            onTasksChanged = { taskStorage.saveTasks(tasks) }
+        )
         taskRecyclerView = findViewById<RecyclerView>(R.id.taskRecyclerView).apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = taskAdapter

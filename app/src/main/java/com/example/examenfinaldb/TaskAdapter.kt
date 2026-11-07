@@ -12,7 +12,8 @@ import com.google.android.material.checkbox.MaterialCheckBox
 
 class TaskAdapter(
     private val tasks: MutableList<Task>,
-    private val onTaskClick: (Task) -> Unit
+    private val onTaskClick: (Task) -> Unit,
+    private val onTasksChanged: () -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,6 +39,7 @@ class TaskAdapter(
         holder.completedCheckBox.setOnCheckedChangeListener { _, isChecked ->
             task.completed = isChecked
             updateVisualState(holder, task)
+            onTasksChanged()
         }
 
         holder.deleteButton.setOnClickListener {
@@ -45,6 +47,7 @@ class TaskAdapter(
             if (currentPosition != RecyclerView.NO_POSITION) {
                 tasks.removeAt(currentPosition)
                 notifyItemRemoved(currentPosition)
+                onTasksChanged()
             }
         }
 
@@ -56,6 +59,7 @@ class TaskAdapter(
     fun addTask(task: Task) {
         tasks.add(task)
         notifyItemInserted(tasks.lastIndex)
+        onTasksChanged()
     }
 
     private fun updateVisualState(holder: TaskViewHolder, task: Task) {
